@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>H.C.E.H.S</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
     <style>
         .nav-link:hover {
             border-bottom: 3px solid #FFD700;
@@ -73,56 +75,55 @@
         }
 
         /* Notice Section */
-       /* Notice Section */
-.notice-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: #f5f5dc; /* Light background color */
-    border-radius: 10px;
-    flex-direction: row; /* Default layout */
-}
+        .notice-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #f5f5dc; /* Light background color */
+            border-radius: 10px;
+            flex-direction: row; /* Default layout */
+        }
 
-.notice-section img {
-    width: 200px;
-    height: 200px;
-    border-radius: 15px;
-    object-fit: cover;
-}
+        .notice-section img {
+            width: 200px;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: cover;
+        }
 
-.notice-content {
-    width: 45%;
-    padding: 0px;
-}
+        .notice-content {
+            width: 45%;
+            padding: 0px;
+        }
 
-.notice-content h2 {
-    font-size: 2rem;
-    color: #2e8b57;
-    font-weight: 900;
-}
+        .notice-content h2 {
+            font-size: 2rem;
+            color: #2e8b57;
+            font-weight: 900;
+        }
 
-.notice-content p {
-    font-size: 1.2rem;
-    color: #333;
-}
+        .notice-content p {
+            font-size: 1.2rem;
+            color: #333;
+        }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .notice-section {
-        flex-direction: column; /* Stack the image and content on smaller screens */
-        text-align: center;
-    }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .notice-section {
+                flex-direction: column; /* Stack the image and content on smaller screens */
+                text-align: center;
+            }
 
-    .notice-section img {
-        width: 100%; /* Make image full-width on smaller screens */
-        height: auto; /* Maintain aspect ratio */
-    }
+            .notice-section img {
+                width: 100%; /* Make image full-width on smaller screens */
+                height: auto; /* Maintain aspect ratio */
+            }
 
-    .notice-content {
-        width: 100%; /* Make content full-width on smaller screens */
-    }
-}
+            .notice-content {
+                width: 100%; /* Make content full-width on smaller screens */
+            }
+        }
 
         /* Modern Responsive Design */
         @media (max-width: 768px) {
@@ -153,7 +154,41 @@
             .navbar-menu.active {
                 display: block;
             }
+
+            /* Navbar mobile toggle button */
+            #navbar-toggle {
+                font-size: 1.5rem; /* Adjust size of hamburger icon */
+            }
         }
+
+        /* Gallery responsiveness */
+        @media (max-width: 768px) {
+            .gallery-container {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .gallery-card {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Fix image cutting in gallery card */
+        .gallery-card img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .bg-cream {
+    background-color: #f5f5dc; /* Cream color */
+  }
+  .text-cream {
+    color: #f5f5dc; /* Cream color */
+  }
+  .bg-gradient-to-r {
+    background-image: linear-gradient(to right, #2f6a38, #006400); /* Green gradient */
+  }
     </style>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
@@ -241,13 +276,13 @@
 
                     if (data.imageUrl) {
                         contentHtml = `
-                            <img src="${data.imageUrl}" alt="${data.name}" class="w-full h-full object-cover rounded-md mb-4">
+                            <img src="${data.imageUrl}" alt="${data.name}" class="w-full h-auto object-cover rounded-md mb-4">
                         `;
                     }
 
                     if (data.videoUrl) {
                         contentHtml = `
-                            <video controls class="w-full h-full object-cover rounded-md mb-4">
+                            <video controls class="w-full h-auto object-cover rounded-md mb-4">
                                 <source src="${data.videoUrl}" type="video/mp4">
                                 Your browser does not support the video tag.
                             </video>
@@ -302,6 +337,11 @@ noticeContainer.innerHTML += noticeHTML;
                 <a href="#gallery" class="nav-link text-lg">Gallery</a>
                 <a href="#notice" class="nav-link text-lg">Notice</a> <!-- New Notice Link -->
             </div>
+            <div class="md:hidden">
+                <button class="text-white" id="navbar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -311,43 +351,29 @@ noticeContainer.innerHTML += noticeHTML;
             <h1 class="hero-heading text-4xl sm:text-5xl font-extrabold text-cream leading-tight mb-6">
                 "We don’t want to tell our dreams. We want to show them." <br>– MK MUZAKKIR
             </h1>
-            <a href="#explore" class="hero-button text-white px-8 py-3 text-lg rounded-lg shadow-md hover:bg-yellow-500 transition">Explore</a>
+            <a href="gallery.html" class="hero-button text-white px-8 py-3 text-lg rounded-lg shadow-md hover:bg-yellow-500 transition">Explore</a>
         </div>
     </section>
 
     <!-- Notice Section -->
-  
     <section id="notice" class="py-16 px-6">
         <h2 class="sm:text-4xl font-extrabold text-green-700  ml-[45%]">NOTICE</h2>
         <div id="notice-container" class="space-y-6">
-            
             <!-- Dynamically added notices will go here -->
-   
         </div>
     </section>
 
-<!-- Gallery Section -->
-<section id="gallery" class="gallery-section py-16 px-6 hover rounded-lg">
-    <div class="text-center mb-10">
-        <h2 class="sm:text-4xl font-bold text-green-800 whitespace-nowrap">MEMORIES</h2>
-        <button id="upload-button" class="mt-4 bg-yellow-400 text-white px-6 py-2 rounded-lg hover:bg-yellow-500 transition whitespace-nowrap">Upload Content</button>
-    </div>
-    <div id="gallery-container" class="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
-        <!-- Dynamically added content -->
-        <div class="flex-shrink-0 w-[calc(100%/3-1.5rem)] sm:w-[calc(100%/2-1.5rem)] md:w-[calc(100%/3-1.5rem)] lg:w-[calc(100%/4-1.5rem)] xl:w-[calc(100%/5-1.5rem)]">
-            <div class="flex flex-col items-center">
-                <!-- Image -->
-                <img src="path_to_image.jpg" alt="Memory Image" class="w-full h-auto rounded-lg shadow-md">
-                <!-- Description -->
-                <p class="mt-2 text-center text-sm text-gray-600 whitespace-nowrap">Description of the memory</p>
-            </div>
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section py-16 px-6 hover rounded-lg">
+        <div class="text-center mb-10">
+            <h2 class="sm:text-4xl font-bold text-green-800 whitespace-nowrap">MEMORIES</h2>
+            <button id="upload-button" class="mt-4 bg-yellow-400 text-white px-6 py-2 rounded-lg hover:bg-yellow-500 transition whitespace-nowrap">Upload Content</button>
         </div>
-        <!-- More content can be dynamically added here -->
-    </div>
-</section>
-
-
-
+        <div id="gallery-container" class="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+            <!-- Dynamically added content -->
+        </div>
+    </section>
+    
     <!-- Modal -->
     <div id="gallery-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
         <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
@@ -366,12 +392,93 @@ noticeContainer.innerHTML += noticeHTML;
             </form>
         </div>
     </div>
-<div></div>
+    <section class="w-full h-full bg-cream p-6 flex mt-20 flex-col lg:flex-row items-center justify-between border-5 rounded-lg">
+        <div class="w-full lg:w-1/2">
+          <h1 class="text-4xl font-extrabold text-green-800 mb-6">School</h1>
+          <p class="text-lg leading-relaxed text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla malesuada, nisi at auctor feugiat, felis felis sollicitudin ipsum, ac consequat mauris nulla vel leo. Vivamus consequat dolor ut lectus varius, ac interdum nulla pharetra. Donec ut placerat nunc. Sed et ligula a nunc iaculis dignissim. Sed in odio ut purus tempus volutpat sit amet sit amet ante.
+          </p>
+        </div>
+        <div class="w-full lg:w-1/2 mt-6 lg:mt-0 flex justify-center">
+          <img class="border-2 rounded-lg w-80 h-auto object-cover" src="hc.jpg" alt="School Image">
+        </div>
+        
+      </section>
+      <section class="w-full h-full bg-cream p-6 flex flex-col lg:flex-row items-center justify-between border-5 rounded-lg">
+        <!-- Left Side (Image) -->
+        <div class="w-full lg:w-1/2 mt-6 lg:mt-0 flex justify-center">
+          <img class="border-2 rounded-lg w-80 h-auto object-cover" src="hce.png" alt="School Image">
+        </div>
+      
+        <!-- Right Side (Text) -->
+        <div class="w-full lg:w-1/2">
+          <h1 class="text-4xl font-extrabold text-green-800 mb-6">School</h1>
+          <p class="text-lg leading-relaxed text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla malesuada, nisi at auctor feugiat, felis felis sollicitudin ipsum, ac consequat mauris nulla vel leo. Vivamus consequat dolor ut lectus varius, ac interdum nulla pharetra. Donec ut placerat nunc. Sed et ligula a nunc iaculis dignissim. Sed in odio ut purus tempus volutpat sit amet sit amet ante.
+          </p>
+        </div>
+      </section>
+      <section class="w-full h-full bg-cream p-6 flex flex-col lg:flex-row items-center justify-between border-5 rounded-lg">
+        <div class="w-full lg:w-1/2">
+          <h1 class="text-4xl font-extrabold text-green-800 mb-6">School</h1>
+          <p class="text-lg leading-relaxed text-gray-700">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla malesuada, nisi at auctor feugiat, felis felis sollicitudin ipsum, ac consequat mauris nulla vel leo. Vivamus consequat dolor ut lectus varius, ac interdum nulla pharetra. Donec ut placerat nunc. Sed et ligula a nunc iaculis dignissim. Sed in odio ut purus tempus volutpat sit amet sit amet ante.
+          </p>
+        </div>
+        <div class="w-full lg:w-1/2 mt-6 lg:mt-0 flex justify-center">
+          <img class="border-2 rounded-lg w-80 h-auto object-cover" src="hc.jpg" alt="School Image">
+        </div>
+      </section>
+      <footer class="w-full bg-gradient-to-r from-green-800 to-green-600 text-cream p-10">
+        <div class="max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between items-center lg:items-start space-y-6 lg:space-y-0">
+          
+          <!-- Left Side: Branding Section -->
+          <div class="text-center lg:text-left">
+            <h1 class="text-5xl font-extrabold text-cream transform transition-all duration-500 hover:scale-110 hover:text-white">
+              MK
+            </h1>
+            <p class="text-sm mt-2 text-cream opacity-80 transform transition-all duration-500 hover:text-white">
+              Innovating for a better tomorrow. Let’s change the world together.
+            </p>
+          </div>
+      
+          <!-- Center: Links with Hover Animation -->
+          <div class="flex flex-wrap justify-center lg:justify-start space-x-6">
+            <a href="#" class="text-cream text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">Home</a>
+            <a href="about.html" class="text-cream text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">About</a>
+            <a href="gallery.html" class="text-cream text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">Gallery</a>
+            <a href="#" class="text-cream text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">Contact</a>
+          </div>
+      
+          <!-- Right Side: Social Media Icons -->
+          <div class="flex justify-center lg:justify-start space-x-6 text-cream text-3xl">
+            <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+              <i class="fab fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      
+        <!-- Bottom: Copyright and Attribution Section -->
+        <div class="text-center mt-6 text-cream text-sm opacity-80">
+          <p class="transform transition-all duration-500 hover:text-white">© 2024 Your Company. All rights reserved.</p>
+          <p class="mt-2 font-extrabold text-cream ">Made by <span class="font-semibold">MK MUZAKKIR</span></p>
+        </div>
+      </footer>
+      
     <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
-        }
+        document.getElementById('navbar-toggle').addEventListener('click', function() {
+            const navbarMenu = document.querySelector('.navbar-menu');
+            navbarMenu.classList.toggle('active');
+        });
     </script>
 </body>
 </html>
