@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>H.C.E.H.S</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nav-link:hover {
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 2px;
+        }
+        .navbar-scrolled {
+            background-color: #2e8b57;
+        }
+        .logo:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Transparent navbar */
+        nav {
+            background-color: transparent !important;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Hero Section Styles */
+        .hero-section {
+            background-color: #2e8b57;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            color: #f5f5dc; /* Cream color */
+        }
+
+        .hero-heading {
+            font-weight: 900;
+            font-size: 4rem;
+            text-transform: uppercase;
+        }
+
+        .hero-button {
+            background-color: #FFD700;
+            color: #2e8b57;
+            font-weight: bold;
+        }
+
+        .hero-button:hover {
+            background-color: #ffcc00;
+        }
+
+        /* Logo Styling */
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #f5f5dc; /* Cream color */
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background-color: #f5f5dc; /* Cream background */
+            padding: 20px ;
+            border-radius: 15px;
+        }
+
+        .gallery-card {
+            max-width: 320px;
+            margin: 10px auto;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Notice Section */
+       /* Notice Section */
+.notice-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #f5f5dc; /* Light background color */
+    border-radius: 10px;
+    flex-direction: row; /* Default layout */
+}
+
+.notice-section img {
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.notice-content {
+    width: 45%;
+    padding: 0px;
+}
+
+.notice-content h2 {
+    font-size: 2rem;
+    color: #2e8b57;
+    font-weight: 900;
+}
+
+.notice-content p {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .notice-section {
+        flex-direction: column; /* Stack the image and content on smaller screens */
+        text-align: center;
+    }
+
+    .notice-section img {
+        width: 100%; /* Make image full-width on smaller screens */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .notice-content {
+        width: 100%; /* Make content full-width on smaller screens */
+    }
+}
+
+        /* Modern Responsive Design */
+        @media (max-width: 768px) {
+            .hero-heading {
+                font-size: 2.5rem; /* Responsive font size for small screens */
+            }
+
+            .logo {
+                font-size: 2rem; /* Smaller logo on mobile */
+            }
+
+            .nav-link {
+                font-size: 1rem; /* Smaller font size for mobile */
+            }
+
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 10;
+            }
+
+            .navbar-menu {
+                display: none;
+            }
+
+            .navbar-menu.active {
+                display: block;
+            }
+        }
+    </style>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+            authDomain: "the-times-e4a65.firebaseapp.com",
+            databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+            projectId: "the-times-e4a65",
+            storageBucket: "the-times-e4a65.appspot.com",
+            messagingSenderId: "958497728175",
+            appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+            measurementId: "G-BLT9FRR41R"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("upload-form");
+            const galleryModal = document.getElementById("gallery-modal");
+            const closeModal = document.getElementById("close-modal");
+            const uploadButton = document.getElementById("upload-button");
+            const galleryContainer = document.getElementById("gallery-container");
+            const noticeContainer = document.getElementById("notice-container");
+
+            uploadButton.addEventListener("click", () => {
+                galleryModal.classList.remove("hidden");
+            });
+
+            closeModal.addEventListener("click", () => {
+                galleryModal.classList.add("hidden");
+            });
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const name = document.getElementById("name").value;
+                const description = document.getElementById("description").value;
+                const file = document.getElementById("file").files[0];
+
+                if (name && description && file) {
+                    const fileRef = storageRef(storage, `gallery/${file.name}`);
+                    try {
+                        await uploadBytes(fileRef, file);
+                        const fileUrl = await getDownloadURL(fileRef);
+
+                        // Check if the file is an image or video
+                        const isImage = file.type.startsWith('image/');
+                        const isVideo = file.type.startsWith('video/');
+
+                        const databaseRef = ref(database, "gallery");
+                        await push(databaseRef, {
+                            name,
+                            description,
+                            imageUrl: isImage ? fileUrl : null,
+                            videoUrl: isVideo ? fileUrl : null,
+                        });
+
+                        alert("Content uploaded successfully!");
+                        galleryModal.classList.add("hidden");
+                        form.reset();
+                    } catch (error) {
+                        console.error("Error uploading content:", error);
+                        alert("Failed to upload content.");
+                    }
+                } else {
+                    alert("Please fill in all fields and upload a file.");
+                }
+            });
+
+            const galleryRef = ref(database, "gallery");
+            onValue(galleryRef, (snapshot) => {
+                galleryContainer.innerHTML = "";
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+
+                    const card = document.createElement("div");
+                    card.className = "gallery-card bg-white rounded-lg shadow-md p-4 mb-4 flex flex-col items-center";
+
+                    let contentHtml = '';
+
+                    if (data.imageUrl) {
+                        contentHtml = `
+                            <img src="${data.imageUrl}" alt="${data.name}" class="w-full h-full object-cover rounded-md mb-4">
+                        `;
+                    }
+
+                    if (data.videoUrl) {
+                        contentHtml = `
+                            <video controls class="w-full h-full object-cover rounded-md mb-4">
+                                <source src="${data.videoUrl}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        ${contentHtml}
+                        <h3 class="text-lg font-bold text-2xl text-green-800 whitespace-nowrap ">${data.name}</h3>
+                        <p class="text-gray-900 mb-2 text-center whitespace-nowrap">${data.description}</p>
+                    `;
+
+                    galleryContainer.appendChild(card);
+                });
+            });
+
+            const noticeRef = ref(database, "notices");
+            onValue(noticeRef, (snapshot) => {
+                noticeContainer.innerHTML = "";
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+
+                    const noticeHTML = `
+    <div class="notice-section">
+        <img src="${data.imageUrl}" alt="Notice Image">
+        <div class="notice-content">
+            <h2>${data.title}</h2>
+            <p>${data.noticeText}</p>
+        </div>
+    </div>
+`;
+
+noticeContainer.innerHTML += noticeHTML;
+
+                });
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full text-white shadow-md z-50 navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <div class="flex items-center">
+                <img src="h.png" alt="Logo" class="logo h-14 w-auto mr-5 cursor-pointer">
+                <span class="logo cursor-pointer">H.C.E.H.S</span>
+            </div>
+            <div class="hidden md:flex space-x-6 font-extrabold font-y navbar-menu">
+                <a href="#about" class="nav-link text-lg">About</a>
+                <a href="#contact" class="nav-link text-lg">Contact</a>
+                <a href="#gallery" class="nav-link text-lg">Gallery</a>
+                <a href="#notice" class="nav-link text-lg">Notice</a> <!-- New Notice Link -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section flex items-center justify-center min-h-screen bg-green-800 px-4">
+        <div class="text-center max-w-3xl">
+            <h1 class="hero-heading text-4xl sm:text-5xl font-extrabold text-cream leading-tight mb-6">
+                "We don’t want to tell our dreams. We want to show them." <br>– MK MUZAKKIR
+            </h1>
+            <a href="#explore" class="hero-button text-white px-8 py-3 text-lg rounded-lg shadow-md hover:bg-yellow-500 transition">Explore</a>
+        </div>
+    </section>
+
+    <!-- Notice Section -->
+  
+    <section id="notice" class="py-16 px-6">
+        <h2 class="sm:text-4xl font-extrabold text-green-700  ml-[45%]">NOTICE</h2>
+        <div id="notice-container" class="space-y-6">
+            
+            <!-- Dynamically added notices will go here -->
+   
+        </div>
+    </section>
+
+<!-- Gallery Section -->
+<section id="gallery" class="gallery-section py-16 px-6 hover rounded-lg">
+    <div class="text-center mb-10">
+        <h2 class="sm:text-4xl font-bold text-green-800 whitespace-nowrap">MEMORIES</h2>
+        <button id="upload-button" class="mt-4 bg-yellow-400 text-white px-6 py-2 rounded-lg hover:bg-yellow-500 transition whitespace-nowrap">Upload Content</button>
+    </div>
+    <div id="gallery-container" class="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <!-- Dynamically added content -->
+        <div class="flex-shrink-0 w-[calc(100%/3-1.5rem)] sm:w-[calc(100%/2-1.5rem)] md:w-[calc(100%/3-1.5rem)] lg:w-[calc(100%/4-1.5rem)] xl:w-[calc(100%/5-1.5rem)]">
+            <div class="flex flex-col items-center">
+                <!-- Image -->
+                <img src="path_to_image.jpg" alt="Memory Image" class="w-full h-auto rounded-lg shadow-md">
+                <!-- Description -->
+                <p class="mt-2 text-center text-sm text-gray-600 whitespace-nowrap">Description of the memory</p>
+            </div>
+        </div>
+        <!-- More content can be dynamically added here -->
+    </div>
+</section>
+
+
+
+    <!-- Modal -->
+    <div id="gallery-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <h3 class="text-lg font-bold mb-4">Upload Content</h3>
+            <form id="upload-form">
+                <label for="name" class="block text-gray-700">Name</label>
+                <input type="text" id="name" class="w-full border rounded px-3 py-2 mb-4" required>
+                <label for="description" class="block text-gray-700">Description</label>
+                <textarea id="description" class="w-full border rounded px-3 py-2 mb-4" rows="3" required></textarea>
+                <label for="file" class="block text-gray-700">File</label>
+                <input type="file" id="file" class="w-full border rounded px-3 py-2 mb-4" accept="image/*, video/*" required>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" id="close-modal" class="bg-red-500 text-white px-4 py-2 rounded">Cancel</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>

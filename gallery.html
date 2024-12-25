@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+        import { getStorage, ref as storageRef, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+            authDomain: "the-times-e4a65.firebaseapp.com",
+            databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+            projectId: "the-times-e4a65",
+            storageBucket: "the-times-e4a65.appspot.com",
+            messagingSenderId: "958497728175",
+            appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+            measurementId: "G-BLT9FRR41R"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+    
+        document.addEventListener("DOMContentLoaded", () => {
+            const galleryContainer = document.getElementById("gallery-container");
+            const imageBtn = document.getElementById("image-btn");
+            const videoBtn = document.getElementById("video-btn");
+            let currentFilter = 'all'; // Set default filter to 'all'
+    
+            // Function to fetch and display gallery content based on filter
+            const fetchGalleryContent = () => {
+                const galleryRef = ref(database, "gallery");
+                onValue(galleryRef, (snapshot) => {
+                    galleryContainer.innerHTML = "";
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        if (currentFilter === 'all' || (currentFilter === 'images' && data.imageUrl) || (currentFilter === 'videos' && data.videoUrl)) {
+                            const card = document.createElement("div");
+                            card.className = "gallery-card bg-white rounded-lg shadow-lg p-4 mb-6 flex flex-col items-center transition-transform transform hover:scale-105";
+    
+                            let contentHtml = '';
+                            if (data.imageUrl) {
+                                contentHtml = `
+                                    <div class="zoom-container">
+                                        <img src="${data.imageUrl}" alt="${data.name}" class="w-full h-full object-cover rounded-md mb-4">
+                                    </div>
+                                `;
+                            }
+    
+                            if (data.videoUrl) {
+                                contentHtml = `
+                                    <video controls class="w-full h-full object-cover rounded-md mb-4">
+                                        <source src="${data.videoUrl}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                `;
+                            }
+    
+                            card.innerHTML = `
+                                ${contentHtml}
+                                <h3 class="text-lg font-bold text-2xl text-green-800">${data.name}</h3>
+                                <p class="text-gray-900 text-center mb-4">${data.description}</p>
+                            `;
+    
+                            // Add click event for image zoom
+                            const image = card.querySelector('img');
+                            if (image) {
+                                image.addEventListener('click', () => {
+                                    const zoomedImageContainer = document.createElement('div');
+                                    zoomedImageContainer.classList.add('zoomed-image');
+                                    zoomedImageContainer.innerHTML = `
+                                        <img src="${image.src}" alt="${image.alt}">
+                                    `;
+                                    document.body.appendChild(zoomedImageContainer);
+    
+                                    zoomedImageContainer.addEventListener('click', () => {
+                                        document.body.removeChild(zoomedImageContainer);
+                                    });
+                                });
+                            }
+    
+                            galleryContainer.appendChild(card);
+                        }
+                    });
+                });
+            };
+    
+            // Event listeners for the filter buttons
+            imageBtn.addEventListener("click", () => {
+                currentFilter = 'images';
+                fetchGalleryContent();
+            });
+    
+            videoBtn.addEventListener("click", () => {
+                currentFilter = 'videos';
+                fetchGalleryContent();
+            });
+    
+            // Fetch all content by default
+            fetchGalleryContent();
+        });
+    </script>
+    
+    <style>
+        .nav-link {
+            font-size: 1.1rem;
+            color: #f5f5dc;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #FFD700;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Transparent navbar */
+        nav {
+            background-color: #2e8b57;
+            backdrop-filter: blur(10px);
+        }
+
+      /* Gallery Section */
+.gallery-section {
+    background-color: #f5f5dc;
+    padding: 20px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Ensure images and videos scale properly */
+.gallery-card img,
+.gallery-card video {
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+/* Image and Video zoom on click */
+.gallery-card img:hover,
+.gallery-card video:hover {
+    transform: scale(1.1);
+}
+
+/* Mobile Friendly Layout */
+@media (max-width: 768px) {
+    .gallery-container {
+        display: block;
+    }
+
+    .gallery-card {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .filter-btn {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+/* Custom zoom for images */
+.zoom-container {
+    position: relative;
+    display: inline-block;
+}
+
+.zoomed-image {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.zoomed-image img {
+    max-width: 90%;
+    max-height: 90%;
+    transition: transform 0.3s ease;
+}
+
+.zoomed-image img:active {
+    transform: scale(1.2);
+}
+
+        .filter-btn {
+            background-color: #FFD700;
+            color: #2e8b57;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 48%;
+        }
+
+        .filter-btn:hover {
+            background-color: #ffcc00;
+        }
+
+        /* Navbar Styling */
+        nav {
+            background-color: #2e8b57; /* Green background for navbar */
+        }
+
+        .nav-link {
+            color: #f5f5dc;
+            font-size: 1.2rem;
+        }
+
+        /* Mobile-Friendly Layout */
+        @media (max-width: 768px) {
+            .gallery-section {
+                padding: 10px;
+            }
+
+            .gallery-card {
+                width: 100%;
+                margin: 10px 0;
+                box-shadow: none;
+            }
+
+            .filter-btn {
+                width: 100%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 w-full text-white shadow-md z-50 navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+            <div class="flex items-center">
+                <img src="h.png" alt="Logo" class="logo h-14 w-auto mr-5 cursor-pointer">
+                <span class="logo text-#f5f5dc text-3xl font-extrabold">H.C.E.H.S</span>
+            </div>
+            <div class="hidden md:flex space-x-6 navbar-menu">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="#notice" class="nav-link">Notice</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery-section py-16 px-6 hover rounded-lg">
+        <div class="text-center mb-10">
+            <h2 class="sm:text-4xl font-bold text-green-800">GALLERY</h2>
+            <!-- Filter buttons for images and videos -->
+            <div class="mt-4 flex flex-col sm:flex-row justify-center">
+                <button id="image-btn" class="filter-btn">Images</button>
+                <button id="video-btn" class="filter-btn">Videos</button>
+            </div>
+        </div>
+        <div id="gallery-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Dynamically added content from Firebase -->
+        </div>
+    </section>
+
+</body>
+
+</html>

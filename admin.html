@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add Notice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
+        import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCt_2hlmYjIpWsxSMpXNOwmpPzwyNnIiB8",
+            authDomain: "the-times-e4a65.firebaseapp.com",
+            databaseURL: "https://the-times-e4a65-default-rtdb.firebaseio.com",
+            projectId: "the-times-e4a65",
+            storageBucket: "the-times-e4a65.appspot.com",
+            messagingSenderId: "958497728175",
+            appId: "1:958497728175:web:60fcdfdf97564fe083165a",
+            measurementId: "G-BLT9FRR41R"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const storage = getStorage(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("notice-form");
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const title = document.getElementById("title").value;
+                const noticeText = document.getElementById("noticeText").value;
+                const file = document.getElementById("image").files[0];
+
+                if (title && noticeText && file) {
+                    const fileRef = storageRef(storage, `notices/${file.name}`);
+                    try {
+                        await uploadBytes(fileRef, file);
+                        const fileUrl = await getDownloadURL(fileRef);
+
+                        const noticeRef = ref(database, "notices");
+                        await push(noticeRef, {
+                            title,
+                            noticeText,
+                            imageUrl: fileUrl,
+                        });
+
+                        alert("Notice uploaded successfully!");
+                        form.reset();
+                    } catch (error) {
+                        console.error("Error uploading notice:", error);
+                        alert("Failed to upload notice.");
+                    }
+                } else {
+                    alert("Please fill in all fields and upload an image.");
+                }
+            });
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+    const adminForm = document.getElementById("admin-form");
+    const mapContainer = document.getElementById("map-container");
+
+    adminForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const mapNumber = document.getElementById("map-number").value;
+        const description = document.getElementById("map-description").value;
+        const file = document.getElementById("map-image").files[0];
+
+        if (mapNumber && description && file) {
+            const fileRef = storageRef(storage, `maps/${file.name}`);
+            try {
+                await uploadBytes(fileRef, file);
+                const fileUrl = await getDownloadURL(fileRef);
+
+                // Add map info to Firebase
+                const mapRef = ref(database, "maps");
+                await push(mapRef, {
+                    mapNumber,
+                    description,
+                    imageUrl: fileUrl,
+                });
+
+                alert("Map information added successfully!");
+                adminForm.reset();
+            } catch (error) {
+                console.error("Error uploading map info:", error);
+                alert("Failed to upload map info.");
+            }
+        } else {
+            alert("Please fill in all fields and upload an image.");
+        }
+    });
+
+    // Load and display maps from Firebase
+    const mapRef = ref(database, "maps");
+    onValue(mapRef, (snapshot) => {
+        mapContainer.innerHTML = "";
+        snapshot.forEach((childSnapshot) => {
+            const data = childSnapshot.val();
+
+            const mapHTML = `
+                <section id="map-section-${data.mapNumber}" class="map-section py-16 px-6">
+                    <div class="max-w-3xl mx-auto text-center">
+                        <img src="${data.imageUrl}" alt="Map ${data.mapNumber}" class="w-full h-auto rounded-lg shadow-md mb-6">
+                        <p class="text-lg text-gray-800">${data.description}</p>
+                    </div>
+                </section>
+            `;
+
+            mapContainer.innerHTML += mapHTML;
+        });
+    });
+});
+
+    </script>
+</head>
+<body class="bg-gray-100">
+
+    <div class="max-w-lg mx-auto mt-20 bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-bold text-green-800 mb-4">Upload New Notice</h2>
+        <form id="notice-form">
+            <label for="title" class="block text-gray-700">Title</label>
+            <input type="text" id="title" class="w-full border rounded px-3 py-2 mb-4" required>
+            
+            <label for="noticeText" class="block text-gray-700">Notice Text</label>
+            <textarea id="noticeText" class="w-full border rounded px-3 py-2 mb-4" rows="4" required></textarea>
+            
+            <label for="image" class="block text-gray-700">Image</label>
+            <input type="file" id="image" class="w-full border rounded px-3 py-2 mb-4" accept="image/*" required>
+            
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit</button>
+        </form>
+    </div>
+<!-- Admin Panel -->
+<section id="admin-panel" class="py-16 px-6 bg-gray-200">
+    <h2 class="text-4xl font-extrabold text-center text-green-700">Admin Panel</h2>
+    <form id="admin-form" class="max-w-3xl mx-auto mt-6 space-y-6">
+        <label for="map-number" class="block text-gray-700">Map Number</label>
+        <input type="number" id="map-number" class="w-full border rounded px-3 py-2 mb-4" required>
+
+        <label for="map-description" class="block text-gray-700">Description</label>
+        <textarea id="map-description" class="w-full border rounded px-3 py-2 mb-4" rows="3" required></textarea>
+
+        <label for="map-image" class="block text-gray-700">Image</label>
+        <input type="file" id="map-image" class="w-full border rounded px-3 py-2 mb-4" accept="image/*" required>
+
+        <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded-lg">Add Map Info</button>
+    </form>
+</section>
+
+</body>
+</html>
