@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - H.C.E.H.S</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <style>
+        /* Custom Styling */
+        .about-section {
+            background-color: #f5f5dc; /* Light Cream */
+            padding: 4rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .about-heading {
+            font-size: 2rem; /* Adjusted for responsiveness */
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #2e8b57;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content p {
+            font-size: 1rem; /* Adjusted for responsiveness */
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-content h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #006400;
+            margin-top: 2rem;
+        }
+
+        .about-image {
+            width: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .founder-photo {
+            border-radius: 50%;
+            width: 120px; /* Adjusted for responsiveness */
+            height: 120px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .testimonials-section {
+            background-color: #2e8b57;
+            color: #f5f5dc;
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+            border-radius: 10px;
+        }
+
+        .testimonial-card {
+            background-color: #f5f5dc;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-card p {
+            font-size: 1rem; /* Adjusted for responsiveness */
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-card h4 {
+            font-weight: bold;
+            color: #006400;
+            font-size: 1.2rem; /* Adjusted for responsiveness */
+        }
+
+        .testimonials-section h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: #2e8b57;
+            margin: 3rem 0;
+        }
+
+        .bg-cream {
+            background-color: #f5f5dc; /* Cream color */
+        }
+
+        .text-cream {
+            color: #f5f5dc; /* Cream color */
+        }
+
+        .bg-gradient-to-r {
+            background-image: linear-gradient(to right, #2f6a38, #006400); /* Green gradient */
+        }
+        /* Logo Styling */
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: green; /* Cream color */
+        }
+ /* Transparent navbar */
+ nav {
+            background-color: transparent !important;
+            backdrop-filter: blur(10px);
+        }
+        .nav-link:hover {
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 2px;
+        }
+        .navbar-scrolled {
+            background-color: #2e8b57;
+        }
+        .logo:hover {
+            transform: scale(1.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        @media (max-width: 768px) {
+          
+
+            .logo {
+                font-size: 2rem; /* Smaller logo on mobile */
+            }
+
+            .nav-link {
+                font-size: 1rem; /* Smaller font size for mobile */
+            
+            }
+
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 10;
+            }
+
+            .navbar-menu {
+                display: none;
+            }
+
+            .navbar-menu.active {
+                display: block;
+            }
+
+            /* Navbar mobile toggle button */
+            #navbar-toggle {
+                font-size: 1.5rem; /* Adjust size of hamburger icon */
+            }
+        }
+
+    </style>
+</head>
+<body class="bg-cream">
+   <!-- Navbar -->
+   <nav class="fixed top-0 left-0 w-full text-white shadow-md z-50 navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-4">
+        <div class="flex items-center">
+            <img src="h.png" alt="Logo" class="logo h-14 w-auto mr-5 cursor-pointer">
+            <span class="logo cursor-pointer text-green-700">H.C.E.H.S</span>
+        </div>
+        <div class="hidden md:flex space-x-6 font-extrabold font-y text-green-700 navbar-menu">
+            <a href="index.html" class="nav-link text-lg">Home</a>
+            <a href="#contact" class="nav-link text-lg">Contact</a>
+            <a href="gallery.html" class="nav-link text-lg">Gallery</a>
+            <a href="#notice" class="nav-link text-lg">Notice</a> <!-- New Notice Link -->
+        </div>
+        <div class="md:hidden">
+            <button class="text-white" id="navbar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="max-w-7xl mx-auto px-6">
+            <h1 class="about-heading text-center text-3xl mt-10 lg:text-4xl">About Holy Crescent English High School</h1>
+            <div class="flex flex-col lg:flex-row items-center">
+                <div class="lg:w-1/2 mb-6 lg:mb-0">
+                    <img src="h.png" alt="Mr. Mohd. Hanif Pitalwala" class="founder-photo mx-auto mb-6">
+                    <h2 class="text-2xl font-bold text-center">Founder: Mr. Mohd. Hanif Pitalwala</h2>
+                    <p class="text-center text-gray-700 text-sm lg:text-base">A visionary businessman who established H.C.E.H.S to provide quality education to children from underprivileged backgrounds.</p>
+                </div>
+                <div class="lg:w-1/2">
+                    <div class="about-content">
+                        <p class="text-sm lg:text-base">On 1st June 1993, Mr. Mohd. Hanif Pitalwala laid the foundation of Holy Crescent English High School. Seeing the plight of children in his community who had to travel long distances and pay exorbitant fees for education, he felt the urgent need to build a school offering high-quality education at an affordable cost. It was his dream to provide the strongest base of education for children from poor localities, so they could stand on their feet and contribute to society.</p>
+
+                        <p class="text-sm lg:text-base">He envisioned a school that would not just teach academic knowledge, but also instill values like respect for one another, discipline, and the importance of cultural activities. With this mission in mind, within just a year, he successfully founded the school.</p>
+
+                        <h3 class="text-lg lg:text-xl">The Birth of Abdul Hamid Pitalwala Educational Society</h3>
+                        <p class="text-sm lg:text-base">To support his dream, Mr. Pitalwala established the "Abdul Hamid Pitalwala Educational Society." This society consists of a team of eminent scholars, dedicated teachers, and a strong management team, all committed to providing a holistic educational experience for every child.</p>
+
+                        <h3 class="text-lg lg:text-xl">Our Core Values</h3>
+                        <ul class="list-disc pl-6 text-sm lg:text-base">
+                            <li>Quality Education for All</li>
+                            <li>Discipline and Respect for Others</li>
+                            <li>Cultural Development and Activities</li>
+                            <li>Empowerment of Underprivileged Communities</li>
+                        </ul>
+
+                        <p class="text-sm lg:text-base">The school has grown from strength to strength, with a focus on nurturing each student's potential and ensuring they are equipped for success in their future endeavors.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section m-5">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-2xl lg:text-3xl font-bold text-center mb-6">What Our Students Say</h2>
+            <div class="flex flex-wrap gap-8 justify-center">
+                <div class="testimonial-card w-full sm:w-1/3 text-center">
+                    <p class="text-sm lg:text-base">"The guidance I received at H.C.E.H.S helped me find my passion and pursue my dreams. The teachers and staff are amazing and always supportive."</p>
+                    <h4 class="text-lg lg:text-xl font-semibold">- MK MUZAKKIR, Former Student</h4>
+                </div>
+                <div class="testimonial-card w-full sm:w-1/3 text-center">
+                    <p class="text-sm lg:text-base">"Holy Crescent English High School not only taught me academics but also life skills that I carry with me every day. I am grateful to be a part of this wonderful institution."</p>
+                    <h4 class="text-lg lg:text-xl font-semibold">- MK MUZAKKIR, Present Student</h4>
+                </div>
+                <div class="testimonial-card w-full sm:w-1/3 text-center">
+                    <p class="text-sm lg:text-base">"The school has always provided a warm, welcoming environment where students are encouraged to grow both intellectually and emotionally."</p>
+                    <h4 class="text-lg lg:text-xl font-semibold">- MK MUZAKKIR, Current Student</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gradient-to-r from-green-800 to-green-600 text-cream mt-10 p-10">
+        <div class="max-w-screen-xl mx-auto flex flex-col lg:flex-row justify-between items-center lg:items-start space-y-6 lg:space-y-0">
+            <!-- Left Side: Branding Section -->
+            <div class="text-center lg:text-left">
+                <h1 class="text-3xl lg:text-5xl font-extrabold text-cream transform transition-all duration-500 hover:scale-110 hover:text-white">
+                    H.C.E.H.S
+                </h1>
+                <p class="text-sm mt-2 text-cream opacity-80 transform transition-all duration-500 hover:text-white">
+                    Empowering the future, one child at a time.
+                </p>
+            </div>
+      
+            <!-- Center: Links with Hover Animation -->
+            <div class="flex flex-wrap justify-center lg:justify-start space-x-6">
+                <a href="index.html" class="text-cream text-sm lg:text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">Home</a>
+                <a href="about.html" class="text-cream text-sm lg:text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">About</a>
+                <a href="gallery.html" class="text-cream text-sm lg:text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">Gallery</a>
+                <a href="contact.html" class="text-cream text-sm lg:text-lg hover:text-white transition-all duration-300 transform hover:translate-y-1">Contact</a>
+            </div>
+      
+            <!-- Right Side: Social Media Icons -->
+            <div class="flex justify-center lg:justify-start space-x-6 text-cream text-3xl">
+                <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="transform hover:scale-110 hover:text-white transition-all duration-300">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+            </div>
+        </div>
+      
+        <!-- Bottom: Copyright and Attribution Section -->
+        <div class="text-center mt-6 text-cream text-sm opacity-80">
+            <p class="transform transition-all duration-500 hover:text-white">© 2024 H.C.E.H.S. All rights reserved.</p>
+            <p class="mt-2 font-extrabold text-cream">Made by <span class="font-semibold">MK MUZAKKIR</span></p>
+        </div>
+    </footer>
+    <script>
+        document.getElementById('navbar-toggle').addEventListener('click', function() {
+            const navbarMenu = document.querySelector('.navbar-menu');
+            navbarMenu.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
